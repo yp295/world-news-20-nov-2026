@@ -14,6 +14,10 @@ OUT = Path("/output/entry.png")
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(SRC, OUT)
+    # Verify the copy is byte for byte identical, so two runs
+    # can never silently diverge.
+    if OUT.stat().st_size != SRC.stat().st_size:
+        raise SystemExit("entry.png size mismatch after copy")
     print(f"Wrote {OUT} ({OUT.stat().st_size} bytes)")
 
 
